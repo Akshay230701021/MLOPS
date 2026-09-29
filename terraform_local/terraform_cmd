@@ -1,0 +1,60 @@
+# CREATE TERRAFORM PROJECT
+mkdir -p ~/terraform-local
+cd ~/terraform-local
+
+# CREATE main.tf
+cat > main.tf <<'EOF'
+terraform {
+  required_providers {
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.5"
+    }
+  }
+}
+
+provider "local" {}
+
+resource "local_file" "mlops_demo" {
+  filename = "${path.module}/mlops.txt"
+
+  content = <<-EOT
+MLOps Terraform Local Demo
+
+Project: Student ML Deployment
+Environment: Local
+Tool: Terraform
+EOT
+}
+EOF
+
+# INITIALIZE TERRAFORM
+terraform init
+
+# VALIDATE CONFIGURATION
+terraform validate
+
+# SHOW EXECUTION PLAN
+terraform plan
+
+# APPLY CONFIGURATION
+terraform apply -auto-approve
+
+# SHOW CREATED FILE
+echo "===== CREATED FILE ====="
+cat mlops.txt
+
+# SHOW TERRAFORM STATE
+echo "===== TERRAFORM STATE ====="
+terraform show
+
+# LIST PROJECT FILES
+echo "===== PROJECT FILES ====="
+ls -la
+
+# DESTROY RESOURCE
+terraform destroy -auto-approve
+
+# FINAL FILE LIST
+echo "===== AFTER DESTROY ====="
+ls -la

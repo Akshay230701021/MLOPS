@@ -1,0 +1,9 @@
+---
+- name: Configure MLOps Server
+  hosts: servers
+  become: yes
+
+  roles:
+    - common
+    - mlflow
+    - dvc

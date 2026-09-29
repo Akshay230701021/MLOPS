@@ -1,0 +1,299 @@
+==================================================
+ANSIBLE - UBUNTU PRACTICAL COMMANDS
+==================================================
+
+# 1. Update Ubuntu
+sudo apt update
+
+# 2. Install Ansible
+sudo apt install ansible -y
+
+# 3. Check Ansible version
+ansible --version
+
+
+==================================================
+# CREATE PROJECT
+==================================================
+
+mkdir -p ~/ansible-mlops
+cd ~/ansible-mlops
+
+mkdir -p roles/common/tasks
+mkdir -p roles/mlflow/tasks
+mkdir -p roles/dvc/tasks
+
+# Install tree command
+sudo apt install tree -y
+
+# View project structure
+tree
+
+
+==================================================
+# CREATE INVENTORY
+==================================================
+
+nano inventory
+
+# Paste inside inventory:
+
+[local]
+localhost ansible_connection=local
+
+# Save:
+# CTRL + O
+# ENTER
+# CTRL + X
+
+
+==================================================
+# TEST ANSIBLE CONNECTION
+==================================================
+
+ansible all -i inventory -m ping
+
+# Expected:
+# localhost | SUCCESS => {
+#     "changed": false,
+#     "ping": "pong"
+# }
+
+
+==================================================
+# CREATE COMMON ROLE
+==================================================
+
+nano roles/common/tasks/main.yml
+
+# Paste:
+
+---
+- name: Update apt cache
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install Python
+  become: yes
+  apt:
+    name: python3
+    state: present
+
+- name: Install pip
+  become: yes
+  apt:
+    name: python3-pip
+    state: present
+
+- name: Install Git
+  become: yes
+  apt:
+    name: git
+    state: present
+
+- name: Install Docker
+  become: yes
+  apt:
+    name: docker.io
+    state: present
+
+- name: Start Docker
+  become: yes
+  service:
+    name: docker
+    state: started
+    enabled: yes
+
+
+==================================================
+# CREATE MLFLOW ROLE
+==================================================
+
+nano roles/mlflow/tasks/main.yml
+
+# Paste:
+
+---
+- name: Install MLflow
+  become: yes
+  pip:
+    name: mlflow
+    break_system_packages: yes
+
+
+==================================================
+# CREATE DVC ROLE
+==================================================
+
+nano roles/dvc/tasks/main.yml
+
+# Paste:
+
+---
+- name: Install DVC
+  become: yes
+  pip:
+    name: dvc
+    break_system_packages: yes
+
+
+==================================================
+# CREATE MAIN PLAYBOOK
+==================================================
+
+nano site.yml
+
+# Paste:
+
+---
+- name: Configure MLOps Server
+  hosts: local
+  become: yes
+
+  roles:
+    - common
+    - mlflow
+    - dvc
+
+
+==================================================
+# CHECK PROJECT STRUCTURE
+==================================================
+
+tree
+
+
+==================================================
+# CHECK PLAYBOOK SYNTAX
+==================================================
+
+ansible-playbook -i inventory site.yml --syntax-check
+
+
+==================================================
+# DRY RUN
+==================================================
+
+ansible-playbook -i inventory site.yml --check
+
+
+==================================================
+# RUN ANSIBLE PLAYBOOK
+==================================================
+
+ansible-playbook -i inventory site.yml
+
+
+==================================================
+# VERIFY INSTALLATIONS
+==================================================
+
+python3 --version
+
+pip3 --version
+
+git --version
+
+docker --version
+
+mlflow --version
+
+dvc --version
+
+
+==================================================
+# CHECK DOCKER SERVICE
+==================================================
+
+sudo systemctl status docker
+
+
+==================================================
+# START DOCKER
+==================================================
+
+sudo systemctl start docker
+
+
+==================================================
+# ENABLE DOCKER AT BOOT
+==================================================
+
+sudo systemctl enable docker
+
+
+==================================================
+# CHECK ANSIBLE INVENTORY
+==================================================
+
+ansible-inventory -i inventory --list
+
+
+==================================================
+# RUN SIMPLE COMMAND ON HOST
+==================================================
+
+ansible all -i inventory -m command -a "whoami"
+
+ansible all -i inventory -m command -a "python3 --version"
+
+ansible all -i inventory -m command -a "git --version"
+
+
+==================================================
+# RUN PLAYBOOK WITH VERBOSE OUTPUT
+==================================================
+
+ansible-playbook -i inventory site.yml -v
+
+
+==================================================
+# CHECK ANSIBLE DOCUMENTATION
+==================================================
+
+ansible-doc apt
+
+ansible-doc service
+
+ansible-doc command
+
+ansible-doc pip
+
+
+==================================================
+# FINAL VERIFICATION
+==================================================
+
+ansible all -i inventory -m ping
+
+python3 --version
+
+git --version
+
+docker --version
+
+mlflow --version
+
+dvc --version
+
+sudo systemctl status docker
+
+
+==================================================
+# EXPECTED FINAL RESULT
+==================================================
+
+PLAY RECAP
+
+localhost : ok=...
+            changed=...
+            unreachable=0
+            failed=0
+            skipped=...
+            rescued=0
+            ignored=0
+
+==================================================
+END
+==================================================

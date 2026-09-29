@@ -1,0 +1,6 @@
+docker build -t fastapi-app .
+docker images
+docker run -d -p 8000:8000 --name fastapi-container fastapi-app
+docker ps
+docker stop fastapi-container
+docker rm fastapi-container

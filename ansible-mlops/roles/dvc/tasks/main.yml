@@ -1,0 +1,5 @@
+---
+- name: Install DVC
+  pip:
+    name: dvc
+    break_system_packages: yes

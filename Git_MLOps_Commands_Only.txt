@@ -1,0 +1,74 @@
+git --version
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+git init
+git branch -M main
+git status
+git diff
+git add index.html
+git add student.py
+git add .
+git commit -m "Update portfolio homepage"
+git log
+git log --oneline
+git remote -v
+git remote add origin https://github.com/USERNAME/REPOSITORY.git
+git remote set-url origin https://github.com/USERNAME/REPOSITORY.git
+git push -u origin main
+git push
+git push -u origin feature/student
+git clone https://github.com/USERNAME/REPOSITORY.git
+cd REPOSITORY
+git branch
+git switch -c feature/student
+git switch main
+git checkout -b feature/student
+git branch feature/student
+git branch -d feature/student
+git pull
+git fetch
+git pull origin main
+git switch develop
+git merge feature/student
+git add .
+git commit -m "Resolve merge conflict"
+git tag v1.0
+git tag
+git push origin v1.0
+git push --tags
+git restore --staged index.html
+git restore index.html
+git remote show origin
+
+mkdir MLOPS
+cd MLOPS
+git init
+git branch -M main
+git status
+git diff
+git add index.html
+git commit -m "Add portfolio homepage"
+git remote add origin https://github.com/USERNAME/MLOPS.git
+git push -u origin main
+
+git clone https://github.com/USERNAME/REPOSITORY.git
+cd REPOSITORY
+git switch -c feature/student
+git status
+git diff
+git add student.py
+git commit -m "Add student management functions"
+git push -u origin feature/student
+
+git switch develop
+git pull origin develop
+git switch feature/books
+git merge develop
+git push
+
+git branch -M main
+git push -u origin main
+
+git remote set-url origin https://github.com/USERNAME/REPOSITORY.git
+git remote -v
+git push -u origin main
